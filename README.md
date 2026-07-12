@@ -18,6 +18,26 @@ storyStatus/
     ├── jira_client.py    ← fetch_jira_story (injectable)
     ├── github_client.py  ← fetch_github_pr_status (tool discovery + injectable)
     └── summarizer.py     ← consolidate_and_summarize → Qwen LLM
+
+Running the script
+python .\story_status.py SCRUM-9
+
+============================================================
+  SUMMARY: SCRUM-9
+============================================================
+### Story Status Summary for SCRUM-9
+
+**Lifecycle Stage:** In Progress  
+**Assignee:** Senthil   
+**Blockers:** None noted  
+**Recommended Next Action:** Verify if Senthil has completed his testing as per his recent comment and address any issues before reopening the GitHub PR for merging.
+
+### Details
+- **Current Lifecycle Stage**: The story is currently being worked on but has not been completed yet.
+- **Assignee**: Senthil is responsible for this story.
+- **Comments & Updates**: Senthil mentioned that testing was in progress and would be done by the following day.
+- **GitHub PR Stage**: The PR for this story was closed without being merged.
+- **Body of PR**: The changes relate to integrating MCP into CLI interface.
 ```
 Next Steps:
 Currently support JIRA, Github and can be extended to confluence, test case management system, CI/CD system to provide overall summary of a epic, story...
