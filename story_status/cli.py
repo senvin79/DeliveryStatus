@@ -6,13 +6,11 @@ Contains the ``main()`` function invoked by:
   - ``story-status <JIRA_ID>``  (when installed via pyproject.toml scripts)
 """
 
-import os
 import sys
 
 from story_status.mcp_client import load_env, load_mcp_config, resolve_value
-from story_status.jira_client import get_jira_server_info, fetch_jira_story
-from story_status.github_client import get_github_server_info, fetch_github_pr_status
-from story_status.summarizer import consolidate_and_summarize
+from story_status.agent_tools import build_tools
+from story_status.agent_graph import run_agent
 
 _SEP = "=" * 60
 
@@ -55,28 +53,16 @@ def main() -> None:
     cloud_id = _require("ATLASSIAN_CLOUD_ID", env)
     repo_owner = _require("GITHUB_REPO_OWNER", env)
     repo_name = _require("GITHUB_REPO_NAME", env)
-    hf_token = resolve_value("HF_TOKEN", env)
-
-    jira_server = get_jira_server_info(config, env)
-    github_server = get_github_server_info(config, env)
+    hf_token = _require("HF_TOKEN", env)
 
     print(f"\n{_SEP}")
     print(f"  Story Status: {jira_id}")
     print(_SEP)
 
-    print(f"\n[1/3] Fetching Jira story {jira_id} ...")
-    jira_report = fetch_jira_story(jira_id, cloud_id=cloud_id, server_info=jira_server)
+    tools = build_tools(config, env, cloud_id=cloud_id, repo_owner=repo_owner, repo_name=repo_name)
 
-    print(f"\n[2/3] Searching GitHub PRs referencing {jira_id} in {repo_owner}/{repo_name} ...")
-    github_report = fetch_github_pr_status(
-        jira_id,
-        repo_owner=repo_owner,
-        repo_name=repo_name,
-        server_info=github_server,
-    )
-
-    print("\n[3/3] Summarizing with LLM ...")
-    summary = consolidate_and_summarize(jira_id, jira_report, github_report, hf_token)
+    print("\n[Agent] Deciding which tools to call ...")
+    summary = run_agent(jira_id, hf_token, tools)
 
     print(f"\n{_SEP}")
     print(f"  SUMMARY: {jira_id}")

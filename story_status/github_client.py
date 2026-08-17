@@ -84,23 +84,10 @@ def _extract_prs(context_result: dict[str, Any]) -> list[dict[str, Any]]:
     Returns:
         List of PR dicts, empty on parse failure.
     """
-    # -- debug: dump raw MCP result --
-    print("[DEBUG] context_result keys :", list(context_result.keys()))
-    _rb = context_result.get("result", {})
-    _cb = _rb.get("content", [])
-    print(f"[DEBUG] result.content blocks: {len(_cb)}")
-    for _i, _blk in enumerate(_cb):
-        if isinstance(_blk, dict):
-            _tv = _blk.get("text", "")
-            print(f"[DEBUG]   block[{_i}] type={_blk.get(chr(116)+chr(121)+chr(112)+chr(101),chr(63))}  text_len={len(_tv)}")
-            print(f"[DEBUG]   block[{_i}] text[:600]={_tv[:600]}")
-    # -- end debug --
     inner_text = extract_content_text(context_result)
     if not inner_text:
         print("[WARN] extract_content_text returned empty string")
         return []
-    print(f"[DEBUG] inner_text length : {len(inner_text)}")
-    print(f"[DEBUG] inner_text[:800]  : {inner_text[:800]}")
     try:
         data = json.loads(inner_text)
         if isinstance(data, list):
@@ -109,8 +96,9 @@ def _extract_prs(context_result: dict[str, Any]) -> list[dict[str, Any]]:
     except json.JSONDecodeError as exc:
         print("[WARN] GitHub MCP response is not valid JSON -- cannot parse PRs.")
         print(f"[WARN]   JSONDecodeError : {exc}")
-        print(f"[WARN]   raw inner_text  : {inner_text[:2000]}")
         return []
+
+
 def _derive_stage(pr: dict[str, Any]) -> str:
     """Map raw PR fields to a human-readable lifecycle stage label.
 

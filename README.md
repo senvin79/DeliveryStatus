@@ -17,7 +17,9 @@ storyStatus/
     ├── mcp_client.py     ← MCPClient, load_env, load_mcp_config, SSE+init fix
     ├── jira_client.py    ← fetch_jira_story (injectable)
     ├── github_client.py  ← fetch_github_pr_status (tool discovery + injectable)
-    └── summarizer.py     ← consolidate_and_summarize → Qwen LLM
+    ├── agent_tools.py    ← build_tools → LangChain tools wrapping the fetchers
+    ├── agent_graph.py    ← LangGraph ReAct agent (build_agent, run_agent)
+    └── cli.py            ← main() — runs the agent end-to-end
 
 Running the script
 python .\story_status.py SCRUM-9
