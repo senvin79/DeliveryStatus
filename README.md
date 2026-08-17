@@ -41,5 +41,21 @@ python .\story_status.py SCRUM-9
 - **GitHub PR Stage**: The PR for this story was closed without being merged.
 - **Body of PR**: The changes relate to integrating MCP into CLI interface.
 ```
+
+Graph Flow
+```mermaid
+graph TD
+    U[User query: SCRUM-9 or 'status of epic X'] --> P[Planner/Router node - LLM]
+    P -->|needs jira| J[Jira tool node]
+    P -->|needs github| G[GitHub tool node]
+    P -->|needs confluence| C[Confluence tool node - future]
+    J --> P
+    G --> P
+    C --> P
+    P -->|enough context| S[Summarizer/Synthesis node - LLM]
+    S -->|missing config e.g. repo name| H[Human-in-the-loop interrupt]
+    H --> P
+    S --> OUT[Final answer]
+ ```
 Next Steps:
 Currently support JIRA, Github and can be extended to confluence, test case management system, CI/CD system to provide overall summary of a epic, story...
