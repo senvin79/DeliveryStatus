@@ -1,6 +1,6 @@
 # DeliveryStatus
-Agent to provide Delivery Status of a work item by fetching information from Jira, Github and more...
- w
+Agentic AI to provide Delivery Status of a work item by fetching information from Jira, Github and more...built using langchain and langgraph
+ 
 OBJETIVE: Program Managers, Product Owners, Scrum Masters can easily get the summarized version of project work item
 Agent uses MCP clients to discover the tool and use the tool to connect to JIRA, Github to get information about project item and use LLM to summarize and next steps.
 ```
